@@ -1,0 +1,45 @@
+# YML file for ClearText Miner demo - Inobits - Louis de Klerk
+version: '3.3'
+
+services:
+  db:
+    image: microsoft/mssql-server-linux:latest
+    environment:
+      sa_password: "Vam00s123!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: sqlcmd -U sa P Vam00s123! -Q 'select 1'
+      interval: 5s
+      retries: 10
+    volumes:
+      -  sqlvol1:/var/opt/mssql
+    networks: 
+      default:
+        aliases:
+          - db1.internal.prod.inobits.com
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      ConnectionStrings__MiningDBContext: "Data Source=db1.internal.prod.inobits.com;Initial Catalog=inodemo1;UID=sa; Password=Vam00s123!;Connection Timeout=10;MultipleActiveResultSets=True;"
+    depends_on:
+      -  db
+    ports:
+      - "5000:80"
+    networks: 
+      default:
+        aliases:
+          - web1.internal.prod.inobits.com
+
+volumes:
+  sqlvol1:
+    external: true
+
+networks:
+  default:
+    external:
+      name: nat

@@ -1,0 +1,153 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    var difficulty = 60;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Azure Bootcamp '18 - Johannesburg!</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h4>...meanwhile, deep in the Azure mountains...</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p>This page coming from @Environment.MachineName.</p>
+    </div>
+</div>
+<br />
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Cleartext Currency Mining</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button id="btnDig" type="button" class="btn btn-danger">Dig!</button>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-12">
+                        <div id="result">...connecting to Miner</div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-4  control-label" for="txtCoins">Coins mined</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control col-md-4" id="txtCoins" placeholder="0 coins mined">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="txtMilliSecondsTaken">Milliseconds taken</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control col-md-4" id="txtMilliSecondsTaken" placeholder="0 Milliseconds">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="barDifficulty">Difficulty</label>
+                                <div class="col-md-8">
+
+                                    <div class="progress" style="margin-top: 7px;">
+                                        <div id="barDifficulty" class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                            <span class="sr-only">Difficulty: 1</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4  control-label" for="txtTotalCoins">Total Coints Mined by everyone</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control col-md-4" id="txtTotalCoins" placeholder="Unknown">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4  control-label" for="txtNumberOfMiners">Number of People mining</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control col-md-4" id="txtNumberOfMiners" placeholder="Unknown">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+
+        function GenGUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
+                function (c) {
+                    var r = Math.random() * 16 | 0,
+                        v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                }).toUpperCase();
+        }
+
+        function GetClientID() {
+
+            var retrievedClientID = localStorage.getItem('clientID');
+            if (retrievedClientID === null) {
+                var clientID = GenGUID();
+                localStorage.setItem('clientID', JSON.stringify(clientID));
+                var retrievedObject = localStorage.getItem('clientID');
+                retrievedClientID = JSON.parse(retrievedObject)
+            }
+            else {
+                retrievedClientID = JSON.parse(retrievedClientID);
+            }
+            return retrievedClientID;
+        }
+
+        $(document).ready(function () {
+            $("#result").text("Miner ready...");
+
+
+            var clientID = GetClientID();
+
+            $("#btnDig").click(function () {
+
+                $("#result").text("...digging!");
+
+                $("#txtCoins").val();
+                $("#txtMilliSecondsTaken").val("mining...");
+
+                $("#txtTotalCoins").val("in flux...");
+
+                $.post("/api/Miner", { depth: 25, clientID : clientID }, function (data) {
+                    $("#result").text("Done!! (Host used: " + data.minerHostName + ")");
+                    //debugger;
+                    $("#txtCoins").val(data.minedCoins);
+                    $("#txtMilliSecondsTaken").val(data.milliSecondsTaken + " milliseconds taken.");
+
+                    $("#txtTotalCoins").val(data.minedCoinsTotal);
+                    $("#txtNumberOfMiners").val(data.numberOfMiners);
+
+                    $('#barDifficulty').css('width', data.difficulty + '%').attr('aria-valuenow', data.difficulty);
+                }).fail(function (err) {
+                    $("#result").text("Error: Could not contact Web Server or Database.");
+                });
+            });
+
+        });
+
+
+    </script>
+
+}

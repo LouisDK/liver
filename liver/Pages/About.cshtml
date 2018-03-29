@@ -1,0 +1,15 @@
+﻿@page
+@model AboutModel
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration   
+@{
+    ViewData["Title"] = "About";
+    var cs = Configuration.GetSection("ConnectionStrings").GetSection("MiningDBContext").Value;
+}
+<h2>@ViewData["Title"]</h2>
+<h3>@Model.Message</h3>
+
+<p>Host: @Environment.MachineName</p>
+
+<p>
+   Connection String: @cs 
+</p>
