@@ -1,0 +1,12 @@
+﻿ FROM microsoft/mssql-server-linux:latest
+
+ 
+ ENV MSSQL_SA_PASSWORD=Vam00s123!
+ ENV ACCEPT_EULA=Y
+
+ RUN mkdir -p /opt/mssql-scripts 
+ COPY *.sql /opt/mssql-scripts/ 
+ RUN /opt/mssql/bin/sqlservr --accept-eula & sleep 20 \
+    && /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'Vam00s123!' -i /opt/mssql-scripts/DBCreate.sql \
+    && pkill sqlservr 
+ 
