@@ -24,3 +24,6 @@ CREATE TABLE [dbo].[DifficultySetting]
 	DifficultyLevel int NOT NULL
 )
 INSERT [DifficultySetting] VALUES (5)
+PRINT 'Database Initialized - LdK'
+SELECT 'Database Initialized... - LdK'
+
