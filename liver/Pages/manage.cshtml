@@ -1,0 +1,53 @@
+﻿@page
+@model liver.Pages.manageModel
+@{
+    ViewData["Title"] = "manage";
+}
+
+<h2>Manage</h2>
+
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Mining Difficulty</h3>
+    </div>
+    <div class="panel-body">
+        <input type="text" class="dial" data-min="5" data-max="99" value="0">
+    </div>
+    <div id="result"></div>
+
+</div>
+
+
+
+@section scripts {
+
+    <script>
+        $(function () {
+            $(".dial").knob();
+        });
+
+        $(".dial").knob({
+            'release': function (v) { 
+
+                $.post("/api/Difficulty", { diff: v }, function (data) {
+                }).fail(function (err) {
+                    $("#result").text("Error: Could not contact Web Server or Database.");
+                });
+
+             }
+        });
+
+        $(document).ready(function () { 
+
+            $.get("/api/Difficulty", function (data) { 
+                
+                $(".dial").val(data);
+            });
+
+        });
+
+    </script>
+    
+}

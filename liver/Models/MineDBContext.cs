@@ -19,6 +19,7 @@ namespace liver.Models
         MiningStatistics GetStats();
 
         decimal GetDifficulty();
+        void SetDifficulty(decimal diff);
     }
 
     public class MiningRepository : IMiningRepository
@@ -127,6 +128,29 @@ namespace liver.Models
             return connection;
         }
 
+        public void SetDifficulty(decimal diff)
+        {
+            var connectionString = this.GetConnection();
+            int count = 0;
+            using (var con = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    con.Open();
+                    var query = "UPDATE [DifficultySetting] SET DifficultyLevel = @difflevel";
+                    count = con.Execute(query, new { difflevel = diff});
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    con.Close();
+                }
+
+            }
+        }
     }
 
 }
