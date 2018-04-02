@@ -17,4 +17,30 @@ namespace liver.Controllers
             return Content($"Healthy! Running on {Environment.MachineName} - time: {DateTime.Now.ToLongTimeString()}");
         }
     }
+
+    [Route("DBHealth")]
+    public class DBHealthController : Controller
+    {
+        Models.IMiningRepository _MiningRepository;
+
+        public DBHealthController(Models.IMiningRepository _miningRepo)
+        {
+            _MiningRepository = _miningRepo;
+        }
+
+        [HttpGet(Name = "GetDBHeath")]
+        public IActionResult Index()
+        {
+            try
+            {
+                var status = _MiningRepository.GetConnectionStatus();
+                return Content($"Connection: {status} {DateTime.Now.ToLongTimeString()}");
+            }
+            catch (Exception)
+            {
+                return Content($"Connection failed! - {DateTime.Now.ToLongTimeString()}");
+            }
+            
+        }
+    }
 }

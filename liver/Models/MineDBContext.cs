@@ -20,6 +20,9 @@ namespace liver.Models
 
         decimal GetDifficulty();
         void SetDifficulty(decimal diff);
+
+        string GetConnectionStatus();
+
     }
 
     public class MiningRepository : IMiningRepository
@@ -143,6 +146,28 @@ namespace liver.Models
                 catch (Exception ex)
                 {
                     throw ex;
+                }
+                finally
+                {
+                    con.Close();
+                }
+
+            }
+        }
+
+        string IMiningRepository.GetConnectionStatus()
+        {
+            var connectionString = this.GetConnection();
+            using (var con = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    con.Open();
+                    return "SQL Connection opened to : " + con.DataSource;
+                }
+                catch (Exception ex)
+                {
+                    return "SQL Connection failed!";
                 }
                 finally
                 {
