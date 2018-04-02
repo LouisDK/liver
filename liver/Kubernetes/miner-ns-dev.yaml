@@ -1,0 +1,10 @@
+{
+  "kind": "Namespace",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "miner-dev",
+    "labels": {
+      "name": "miner-dev"
+    }
+  }
+}

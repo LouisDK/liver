@@ -1,0 +1,51 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: basic-miner-db-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: basic-miner-db
+    spec:
+      containers:
+      - name: basic-miner-db
+        image: inobitscr.azurecr.io/liver_db:latest
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssqlsapwd
+              key: SA_PASSWORD 
+        volumeMounts:
+          - mountPath: /var/opt/mssql
+            name: sqlvol1
+        # livenessProbe:
+        #  exec:
+        #    command:
+        #    - "/opt/mssql-tools/bin/sqlcmd -U sa -P Vam00s123! -Q 'select 1'"
+        #  failureThreshold: 10
+        #  periodSeconds: 5
+        ports:
+        - containerPort: 1433
+      imagePullSecrets:
+        - name : inobitscr
+      volumes:
+        - name: sqlvol1
+          persistentVolumeClaim:
+            claimName: mssql-data-vol1-pvc        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: basic-miner-db-svc
+spec:
+  ports:
+  - port: 1433
+  selector:
+    app: basic-miner-db
+  type: LoadBalancer
+

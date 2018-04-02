@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: ino-miner-basic-web
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ino-miner-basic-web
+    spec:
+      containers:
+      - name: ino-miner-basic-web
+        image: inobitscr.azurecr.io/liver_web:latest  
+        env:
+          - name: ConnectionStrings__MiningDBContext
+            valueFrom:
+              secretKeyRef:
+                name: connectionstringmining 
+                key: connectionstringmining  
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+        - name : inobitscr
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ino-miner-basic-web
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: ino-miner-basic-web
