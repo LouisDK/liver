@@ -1,5 +1,5 @@
 # YML file for ClearText Miner demo - Inobits - Louis de Klerk
-version: '3.3'
+version: '3'
 
 services:
   db:
