@@ -32,7 +32,7 @@ Demo project for Docker using ASP.NET Core 2.0
 3. Create a Resource Group to host your cluster. Must be an empty resource group. `az group create --name <ResourceGroupName> --location eastus` Note: I tried and failed with West Europe, but East US works fine. (2 April 2018)
 4. Create the Kubernetes Cluster in Azure: `az aks create --resource-group <ResourceGroupName> --name <ClusterName> --node-count 1 --generate-ssh-keys`
 5. Get the credentials needed to use KubeCTL locally: `az aks get-credentials --resource-group <ResourceGroupName> --name <ClusterName>`
-6. Download KubeCTL (the Kubernetes console) (unzip and place in the root of C:\ )
+6. Download KubeCTL (the Kubernetes console), instructions at `https://kubernetes.io/docs/tasks/tools/install-kubectl/` (unzip and place in the root of C:\ )
 7. Create the 'dev' namespace in Kubernetes - we will do everything in this namespace: `kubectl create -f .\miner-ns-dev.yaml`
 8. Create a Context for the dev namespace: `kubectl config set-context dev --namespace=miner-dev --cluster=<ClusterName> --user=clusterUser_<ResourceGroupName>_<ClusterName>` - this allows you to execute KubeCTL commands that only affect this namespace.
 Create the 'prod' namespace in Kubernetes (not used yet): `kubectl create -f .\miner-ns-prod.yaml`
