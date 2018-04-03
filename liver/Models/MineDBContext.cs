@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ namespace liver.Models
         void SetDifficulty(decimal diff);
 
         string GetConnectionStatus();
-
+        void InitializeDB();
     }
 
     public class MiningRepository : IMiningRepository
@@ -172,6 +173,74 @@ namespace liver.Models
                 finally
                 {
                     con.Close();
+                }
+
+            }
+        }
+
+        public void InitializeDB()
+        {
+            CreateDatabase();
+            CreateTables();
+        }
+
+        private void CreateTables()
+        {
+            FileStream fileStream = new FileStream("InitTables.sql", FileMode.Open);
+            using (StreamReader reader = new StreamReader(fileStream))
+            {
+                string sql = reader.ReadToEnd();
+
+                var connectionString = this.GetConnection();
+                using (var con = new SqlConnection(connectionString))
+                {
+                    try
+                    {
+                        con.Open();
+                        con.Execute(sql);
+                    }
+                    catch (Exception ex)
+                    {
+                        var x = ex.Message;
+                        // silent fail... nice... :-)
+                    }
+                    finally
+                    {
+                        con.Close();
+                    }
+
+                }
+
+            }
+        }
+
+        private void CreateDatabase()
+        {
+            FileStream fileStream = new FileStream("DBCreate.sql", FileMode.Open);
+            using (StreamReader reader = new StreamReader(fileStream))
+            {
+                string sql = reader.ReadToEnd();
+
+                var connectionString = this.GetConnection();
+                connectionString = connectionString.Replace("inodemo1", "master");
+                using (var con = new SqlConnection(connectionString))
+                {
+                    try
+                    {
+                        con.Open();
+                        con.ChangeDatabase("master");
+                        con.Execute(sql);
+                    }
+                    catch (Exception ex)
+                    {
+                        var x = ex.Message;
+                        // silent fail... nice... :-)
+                    }
+                    finally
+                    {
+                        con.Close();
+                    }
+
                 }
 
             }

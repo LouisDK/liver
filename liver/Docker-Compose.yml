@@ -3,9 +3,7 @@ version: '3'
 
 services:
   db:
-    build:
-      context: .
-      dockerfile: Dockerfile-sql
+    image: microsoft/mssql-server-linux:2017-latest
     environment:
       sa_password: "Vam00s123!"
       ACCEPT_EULA: "Y"
