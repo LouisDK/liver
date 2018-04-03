@@ -38,7 +38,7 @@ Demo project for Docker using ASP.NET Core 2.0
 Create the 'prod' namespace in Kubernetes (not used yet): `kubectl create -f .\miner-ns-prod.yaml`
 9. Create a Context for the dev namespace: `kubectl config set-context prod --namespace=miner-prod --cluster=<ClusterName> --user=clusterUser_<ResourceGroupName>_<ClusterName>` - this allows you to execute KubeCTL commands that only affect this namespace.
 10. Use the 'dev' namespace: `kubectl config use-context dev` - all KubeCTL commands will now only affect this namespace (isolated from all other namespaces)
-11. Create a Secret used to pull down images from my private Azure Container Registry `kubectl create secret docker-registry inobitscr --docker-server=https://inobitscr.azurecr.io --docker-username=inobitscr --docker-password=V=MejXdKyepx9UqvV5pDLJuhkPw5yOES --docker-email=louis@netsurit.com` - you can also use your own private Azure Container Registry, or a public Docker registry (public docker registries does not need a secret like this in order for Kubernetes to pull it)
+11. Create a Secret used to pull down images from my private Azure Container Registry `kubectl create secret docker-registry inobitscr --docker-server=https://inobitscr.azurecr.io --docker-username=inobitscr --docker-password=V=MejXdKyepx9UqvV5pDLJuhkPw5yOES --docker-email=nullpointer@inobits.com` - you can also use your own private Azure Container Registry, or a public Docker registry (public docker registries does not need a secret like this in order for Kubernetes to pull it)
 12. Create a Secret to contain our SQL Server's SA password (so that it will not be hardcoded in config files, or stored our git repository): `kubectl create secret generic mssqlsapwd --from-literal=SA_PASSWORD="Vam00s321!"`
 13. Create a Secret to contain our Connection String: `kubectl create secret generic connectionstringmining --from-literal=connectionstringmining="Data Source=basic-miner-db-svc;Initial Catalog=inodemo1;UID=sa;Password=Vam00s321!;Connection Timeout=10;MultipleActiveResultSets=True;"`
 14. Create a Storage 'Persistant Volume Claim' that maps to an Azure Disk (attached to the Node(s) (Azure VM) of the Cluster) `kubectl apply -f .\basic-miner-sqlstorage.yaml`
@@ -64,14 +64,14 @@ While the application is running:
 1. Start a shell, and contiously ping the web server (See note 2 above). Keep this window visible.
 2. Get the Pod name of the web server: `kubectl get pods`
 3. Kill the pod that runs the web server: `kubectl delete pod <podname>`
-4. Note in the shell window where we ping the web server that the service is disrupted for 1-3 seconds, before it resumes service. Note that the name of the server changed. This means that when the old pod (and its contained) died, another pod (and another new instance of that container) was created and put in place.
+4. Note in the shell window where we ping the web server that the service is disrupted for 1-3 seconds, before it resumes service. Note that the name of the server changed. This means that when the old pod (and its container) died, another pod (and another new instance of that container) was created and put in place.
 
 ## Demo 2: (simulating a database server dying)
 While the application is running:
-1. Start a shell, and contiously as the web server if it can talk to the database server (See note 3 above). Keep this window visible.
+1. Start a shell, and contiously ask the web server if it can talk to the database server (See note 3 above). Keep this window visible.
 2. Get the Pod name of the web server: `kubectl get pods`
 3. Kill the pod that runs the database server: `kubectl delete pod <podname>`
-4. Note in the shell window where we ping the web server that the service reports that it cannot contact the database server for 2-5 seconds, before it resumes service. Note that the name of the server changed. This means that when the old pod (and its contained) died, another pod (and another new instance of that container) was created and put in place. At that stage the newly running SQL Server connected to the external volume (Azure Disk) where the database files are kept, attached these, recovered them, and started to serve the database.
+4. Note in the shell window where we ping the web server that the service reports that it cannot contact the database server for 2-5 seconds, before it resumes service. Note that the name of the server changed. This means that when the old pod (and its container) died, another pod (and another new instance of that container) was created and put in place. At that stage the newly running SQL Server connected to the external volume (Azure Disk) where the database files are kept, attached these, recovered them, and started to serve the database.
 
 ### Clean up
  - Delete the Azure Resource Group - this removes EVERYTHING (including the data in the persisted volume)

@@ -27,10 +27,10 @@ namespace liver
 
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddTransient<Models.IMiningRepository, Models.MiningRepository>();
-
+            
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "InoCoint API", Version = "v1" });
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "InoCoin API", Version = "v1" });
             });
         }
 
