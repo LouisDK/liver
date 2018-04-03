@@ -14,15 +14,12 @@ Demo project for Docker using ASP.NET Core 2.0
 7. Create and run the containers `docker-compose up -d`
 8. To continously test if its running, run `webping.ps1` (_Control+C_ to stop it)
 9. Open a browser and go to http://localhost:5000  
-10. If the web application complains about the database being unavailable, it was not initialized properly. 
-* Find the Container ID for the *liver_db* container: `docker ps`
-* Run `docker exec -it 68c /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'Vam00s123!' -i /opt/mssql-scripts/DBCreate.sql`
-11. To see how much resources (e.g. CPU) are consumed, run `Docker stats`
+10. To see how much resources (e.g. CPU) are consumed, run `Docker stats`
 
 ### Clean up
 1. Run `Docker-compose down`
 2. Remove images (find image id `docker images`, then remove it `docker rmi <image id>`)
-3. Remove volume (docker volume rm sqlvol1)
+3. Remove volume (`docker volume rm sqlvol1`)
 4. Remove network (find network id - `docker network ls`, then remove `docker network rm <network id>`)
 
 
