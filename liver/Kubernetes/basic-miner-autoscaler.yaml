@@ -1,0 +1,13 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: miner-web-autoscaler
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: ino-miner-basic-web
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50 # The web pod Requests 0.2 CPU, so when it hits 0.1 CPU, add a replica!
