@@ -164,9 +164,10 @@ namespace liver.Models
                 try
                 {
                     con.Open();
+                    var result = con.ExecuteScalar<int>("select 1 + 1");
                     return "SQL Connection opened to : " + con.DataSource;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return "SQL Connection failed!";
                 }
