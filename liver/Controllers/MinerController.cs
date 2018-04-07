@@ -99,7 +99,7 @@ namespace liver.Controllers
         public static void CPUSquareRootKill(int difficulty)
         {
 
-            System.Threading.Tasks.Parallel.For(1, difficulty * difficulty, y => {
+            System.Threading.Tasks.Parallel.For(1, difficulty , y => {
                 var x = 0.0001;
                 for (int i = 0; i < difficulty * 1000000; i++)
                 {
