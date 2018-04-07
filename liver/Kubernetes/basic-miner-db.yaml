@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: basic-miner-db
-        image: inobitscr.azurecr.io/liver_db:latest
+        image: microsoft/mssql-server-linux:latest
         env:
         - name: ACCEPT_EULA
           value: "Y"

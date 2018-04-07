@@ -35,16 +35,18 @@ namespace liver.Controllers
             Stopwatch watch = new Stopwatch();
             watch.Start();
             decimal x = 1;
-            for (int i = 0; i < _DifficultyLevel / 2 ; i++)
-            {
-                x += 1;
-                var cpuLoad = i * i;
-                if (cpuLoad > 90)
-                {
-                    cpuLoad = 90;
-                }
-                CPUKill(cpuLoad, 300);
-            }
+            //for (int i = 0; i < _DifficultyLevel / 2 ; i++)
+            //{
+            //    x += 1;
+            //    var cpuLoad = i * i;
+            //    if (cpuLoad > 90)
+            //    {
+            //        cpuLoad = 90;
+            //    }
+            //    CPUKill(cpuLoad, 300);
+            //}
+
+            CPUSquareRootKill(Convert.ToInt32(_DifficultyLevel));
 
             var mined = x * (1 / _DifficultyLevel);
             watch.Stop();
@@ -91,6 +93,19 @@ namespace liver.Controllers
                     }
                 }
             }));
+
+        }
+
+        public static void CPUSquareRootKill(int difficulty)
+        {
+
+            System.Threading.Tasks.Parallel.For(1, difficulty * difficulty, y => {
+                var x = 0.0001;
+                for (int i = 0; i < difficulty * 1000000; i++)
+                {
+                    x = Math.Sqrt(x);
+                }
+            });
 
         }
 

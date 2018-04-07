@@ -1,8 +1,8 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: miner-web-autoscaler
-  namespace: default
+  name: miner-web-autoscaler2
+  namespace: miner-dev
 spec:
   scaleTargetRef:
     apiVersion: apps/v1beta1

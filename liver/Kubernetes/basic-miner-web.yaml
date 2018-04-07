@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: ino-miner-basic-web
-        image: inobitscr.azurecr.io/liver_web:latest  
+        image: inobitscr.azurecr.io/liver_web:4  
         resources:
           limits:
             cpu: "0.3" # Not allowed to use 1/3 of the Node's CPU
