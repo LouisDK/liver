@@ -25,7 +25,7 @@ Demo project for Docker using ASP.NET Core 2.0
 
 # Instructions for use with Kubernetes in Azure (AKS)
 1. Get an Azure subscription
-2. Install the Azure CLI (Command Line Interface) (Or, if you dont want to, you can use the Cloud Console)
+2. Install the Azure CLI (Command Line Interface) (Or, if you dont want to, you can use the Cloud Console), and Authenticate with your CLI <add url to page that explains how>
 3. Create a Resource Group to host your cluster. Must be an empty resource group. `az group create --name <ResourceGroupName> --location eastus` Note: I tried and failed with West Europe, but East US works fine. (2 April 2018)
 4. Create the Kubernetes Cluster in Azure: `az aks create --resource-group <ResourceGroupName> --name <ClusterName> --node-count 1 --generate-ssh-keys`
 5. Get the credentials needed to use KubeCTL locally: `az aks get-credentials --resource-group <ResourceGroupName> --name <ClusterName>`
@@ -33,7 +33,7 @@ Demo project for Docker using ASP.NET Core 2.0
 7. Create the 'dev' namespace in Kubernetes - we will do everything in this namespace: `kubectl create -f .\miner-ns-dev.yaml`
 8. Create a Context for the dev namespace: `kubectl config set-context dev --namespace=miner-dev --cluster=<ClusterName> --user=clusterUser_<ResourceGroupName>_<ClusterName>` - this allows you to execute KubeCTL commands that only affect this namespace.
 Create the 'prod' namespace in Kubernetes (not used yet): `kubectl create -f .\miner-ns-prod.yaml`
-9. Create a Context for the dev namespace: `kubectl config set-context prod --namespace=miner-prod --cluster=<ClusterName> --user=clusterUser_<ResourceGroupName>_<ClusterName>` - this allows you to execute KubeCTL commands that only affect this namespace.
+9. Create a Context for the Production namespace: `kubectl config set-context prod --namespace=miner-prod --cluster=<ClusterName> --user=clusterUser_<ResourceGroupName>_<ClusterName>` - this allows you to execute KubeCTL commands that only affect this namespace.
 10. Use the 'dev' namespace: `kubectl config use-context dev` - all KubeCTL commands will now only affect this namespace (isolated from all other namespaces)
 11. Create a Secret used to pull down images from my private Azure Container Registry `kubectl create secret docker-registry inobitscr --docker-server=https://inobitscr.azurecr.io --docker-username=inobitscr --docker-password=V=MejXdKyepx9UqvV5pDLJuhkPw5yOES --docker-email=nullpointer@inobits.com` - you can also use your own private Azure Container Registry, or a public Docker registry (public docker registries does not need a secret like this in order for Kubernetes to pull it)
 12. Create a Secret to contain our SQL Server's SA password (so that it will not be hardcoded in config files, or stored our git repository): `kubectl create secret generic mssqlsapwd --from-literal=SA_PASSWORD="Vam00s321!"`
