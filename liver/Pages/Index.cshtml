@@ -135,7 +135,13 @@
                 $.post("/api/Miner", { depth: 25, clientID : clientID }, function (data) {
                     $("#result").text("Done!! (Host used: " + data.minerHostName + ")");
                     //debugger;
-                    $("#txtCoins").val(data.minedCoins);
+                    if ($("#txtCoins").val() == "") {
+                        $("#txtCoins").val(0);
+                    }
+                    var prevCoinsMined = $("#txtCoins").val();
+                    
+                    $("#txtCoins").val(parseFloat(data.minedCoins) + parseFloat(prevCoinsMined));
+
                     $("#txtMilliSecondsTaken").val(data.milliSecondsTaken + " milliseconds taken.");
 
                     $("#txtTotalCoins").val(data.minedCoinsTotal);
