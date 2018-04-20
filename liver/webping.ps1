@@ -2,7 +2,7 @@
 DO
 {
     try {
-        (Invoke-WebRequest 'http://localhost:5000/health' -TimeoutSec 1).Content
+        (Invoke-WebRequest 'http://localhost:5000/health' -TimeoutSec 2).Content
     }
     catch {
         Write-Host "Service not responding..." -ForegroundColor "Red";
